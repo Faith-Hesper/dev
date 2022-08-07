@@ -4,24 +4,9 @@
 
 <script setup>
   import { onMounted, ref, shallowReactive, nextTick, toRef, watch } from "vue"
-  import { useStore } from "vuex"
-  import mapObject, { mapControl, pulsingIcon } from "@/utils/map"
-  import { sqlQuery, buffer_Analysis } from "@/utils/analysis"
-  const store = useStore()
-  // const maps = shallowReactive({
-  //   map: {},
-  //   control: {},
-  // })
-  // const props = defineProps({
-  //   mapId: {
-  //     type: String,
-  //     default: 'map'
-  //   },
-  //   sqlResultLayer: {
-  //     type: Object,
-  //     default: {}
-  //   }
-  // })
+  // import { useStore } from "vuex"
+  // import mapObject, { mapControl, pulsingIcon } from "@/utils/map"
+  // import { sqlQuery, buffer_Analysis } from "@/utils/analysis"
 
   const MyCustomMap = shallowReactive({
     map: null,

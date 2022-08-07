@@ -1,10 +1,10 @@
-(function (window) {
+;(function (window) {
   L.Icon.Pulse = L.DivIcon.extend({
     options: {
-      className: '',
+      className: "",
       iconSize: [12, 12],
-      fillColor: 'red',
-      color: 'red',
+      fillColor: "red",
+      color: "red",
       animate: true,
       heartbeat: 1,
     },
@@ -14,41 +14,41 @@
 
       // css
 
-      var uniqueClassName = 'lpi-' + new Date().getTime() + '-' + Math.round(Math.random() * 100000)
+      let uniqueClassName = "lpi-" + new Date().getTime() + "-" + Math.round(Math.random() * 100000)
 
-      var before = ['background-color: ' + this.options.fillColor]
-      var after = [
-        'box-shadow: 0 0 6px 2px ' + this.options.color,
+      let before = ["background-color: " + this.options.fillColor]
+      let after = [
+        "box-shadow: 0 0 6px 2px " + this.options.color,
 
-        'animation: pulsate ' + this.options.heartbeat + 's ease-out',
-        'animation-iteration-count: infinite',
-        'animation-delay: ' + (this.options.heartbeat + 0.1) + 's',
-        'position:absolute',
-        'left:0',
+        "animation: pulsate " + this.options.heartbeat + "s ease-out",
+        "animation-iteration-count: infinite",
+        "animation-delay: " + (this.options.heartbeat + 0.1) + "s",
+        "position:absolute",
+        "left:0",
       ]
 
       if (!this.options.animate) {
-        after.push('animation: none')
-        after.push('box-shadow:none')
+        after.push("animation: none")
+        after.push("box-shadow:none")
       }
 
-      var css = [
-        '.' + uniqueClassName + '{' + before.join(';') + ';}',
-        '.' + uniqueClassName + ':after{' + after.join(';') + ';}',
-      ].join('')
+      let css = [
+        "." + uniqueClassName + "{" + before.join(";") + ";}",
+        "." + uniqueClassName + ":after{" + after.join(";") + ";}",
+      ].join("")
 
-      var el = document.createElement('style')
+      let el = document.createElement("style")
       if (el.styleSheet) {
         el.styleSheet.cssText = css
       } else {
         el.appendChild(document.createTextNode(css))
       }
 
-      document.getElementsByTagName('head')[0].appendChild(el)
+      document.getElementsByTagName("head")[0].appendChild(el)
 
       // apply css class
 
-      this.options.className = this.options.className + ' leaflet-pulsing-icon ' + uniqueClassName
+      this.options.className = this.options.className + " leaflet-pulsing-icon " + uniqueClassName
 
       // initialize icon
 

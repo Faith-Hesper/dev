@@ -2,16 +2,12 @@
  * @Author: Faith
  * @Date: 2022-04-02 17:08
  * @LastAuthor: Faith
- * @LastEditTime: 2022-08-07 10:07
+ * @LastEditTime: 2022-08-07 14:42
  * @Description: 超图分析函数
  */
 
-const dataUrl = "http://localhost:8090/iserver/services/data-earthquakePoints/rest/data"
-const spatialanalystUrl =
-  "http://localhost:8090/iserver/services/spatialAnalysis-earthquakePoints/restjsr/spatialanalyst"
-
 // 获取数据源集合
-async function getDatasourcesName(url = dataUrl) {
+async function getDatasourcesName(url = BASE_CONFIG.BASEURL.dataUrl) {
   return await new Promise((resolve, reject) => {
     L.supermap.datasourceService(url).getDatasources(serviceResult => {
       const datasourceNames = serviceResult.result.datasourceNames
@@ -22,7 +18,7 @@ async function getDatasourcesName(url = dataUrl) {
 }
 
 // 获取数据集
-async function getDatasetsName(datasourceName, url = dataUrl) {
+async function getDatasetsName(datasourceName, url = BASE_CONFIG.BASEURL.dataUrl) {
   return await new Promise((resolve, reject) => {
     L.supermap.datasetService(url).getDatasets(datasourceName, function (serviceResult) {
       const datasetNames = serviceResult.result.datasetNames
@@ -81,8 +77,7 @@ async function sqlQuery({
 }
 
 // 查询字段信息
-async function getFieldsName(url = "") {
-  url = url == "" ? dataUrl : url
+async function getFieldsName(url = BASE_CONFIG.BASEURL.dataUrl) {
   return await new Promise((resolve, reject) => {
     const fieldsParam = new SuperMap.FieldParameters({
       datasource: "points",
@@ -114,7 +109,7 @@ async function buffer_Analysis() {
   // 分析
   return await new Promise((resolve, reject) => {
     L.supermap
-      .spatialAnalystService(spatialanalystUrl)
+      .spatialAnalystService(BASE_CONFIG.BASEURL.spatialAnalystUrl)
       .bufferAnalysis(butterflyAnalystParams, serviceResult => {
         serviceResult.type === "processFailed"
           ? alert(serviceResult.error + "\n请打开iServer服务")

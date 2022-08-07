@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="form" label-position="left" label-width="auto">
+  <el-form class="form" :model="form" label-position="left" label-width="auto">
     <el-form-item label="时间">
       <el-date-picker
         v-model="form.date"
@@ -90,91 +90,84 @@
 </template>
 
 <script setup>
-import { getFieldsName } from "@/utils/analysis"
-import { reactive, ref, onBeforeMount } from "vue"
-const btnStatus = ref("显示")
-const status = ref(false)
-const fields = ref([])
-const form = reactive({
-  date: [],
-  lng_gt: "",
-  lng_lt: "",
-  lat_gt: "",
-  lat_lt: "",
-  depth_gt: "",
-  depth_lt: "",
-  class_gt: "",
-  class_lt: "",
-})
+  import { getFieldsName } from "@/utils/analysis"
+  import { reactive, ref, onBeforeMount } from "vue"
+  const btnStatus = ref("显示")
+  const status = ref(false)
+  const fields = ref([])
+  const form = reactive({
+    date: [],
+    lng_gt: "",
+    lng_lt: "",
+    lat_gt: "",
+    lat_lt: "",
+    depth_gt: "",
+    depth_lt: "",
+    class_gt: "",
+    class_lt: "",
+  })
 
-const emit = defineEmits(["footer", "search"])
+  const emit = defineEmits(["footer", "search"])
 
-onBeforeMount(async () => {
   // 获取字段名集合
-  fields.value = await getFieldsName()
-  // console.log(fields);
-})
+  getFieldsName().then(res => (fields.value = res))
 
-// 格式化SQL查询参数
-const sqlFilterParams = () => {
-  let temp = ""
-  if (form.date[0] !== undefined) {
-    temp += `${fields.value[3]} >= "${form.date[0]}  00:00:00" and `
+  // 格式化SQL查询参数
+  const sqlFilterParams = () => {
+    let temp = ""
+    if (form.date[0] !== undefined) {
+      temp += `${fields.value[3]} >= "${form.date[0]}  00:00:00" and `
+    }
+    if (form.date[1] !== undefined) {
+      temp += `${fields.value[3]} < "${form.date[1]}  00:00:00" and `
+    }
+    if (form.lng_gt !== "") {
+      temp += `${fields.value[5]} >= "${form.lng_gt}" and `
+    }
+    if (form.lng_lt !== "") {
+      temp += `${fields.value[5]} < "${form.lng_lt}" and `
+    }
+    if (form.lat_gt !== "") {
+      temp += `${fields.value[6]} >= "${form.lat_gt}" and `
+    }
+    if (form.lat_lt !== "") {
+      temp += `${fields.value[6]} < "${form.lat_lt}" and `
+    }
+    if (form.depth_gt !== "") {
+      temp += `${fields.value[7]} >= "${form.depth_gt}" and `
+    }
+    if (form.depth_lt !== "") {
+      temp += `${fields.value[7]} < "${form.depth_lt}" and `
+    }
+    if (form.class_gt !== "") {
+      temp += `${fields.value[9]} >= "${form.class_gt}" and `
+    }
+    if (form.class_lt !== "") {
+      temp += `${fields.value[9]} < "${form.class_lt}" and `
+    }
+    return (temp = temp.slice(0, -5))
   }
-  if (form.date[1] !== undefined) {
-    temp += `${fields.value[3]} < "${form.date[1]}  00:00:00" and `
-  }
-  if (form.lng_gt !== "") {
-    temp += `${fields.value[5]} >= "${form.lng_gt}" and `
-  }
-  if (form.lng_lt !== "") {
-    temp += `${fields.value[5]} < "${form.lng_lt}" and `
-  }
-  if (form.lat_gt !== "") {
-    temp += `${fields.value[6]} >= "${form.lat_gt}" and `
-  }
-  if (form.lat_lt !== "") {
-    temp += `${fields.value[6]} < "${form.lat_lt}" and `
-  }
-  if (form.depth_gt !== "") {
-    temp += `${fields.value[7]} >= "${form.depth_gt}" and `
-  }
-  if (form.depth_lt !== "") {
-    temp += `${fields.value[7]} < "${form.depth_lt}" and `
-  }
-  if (form.class_gt !== "") {
-    temp += `${fields.value[9]} >= "${form.class_gt}" and `
-  }
-  if (form.class_lt !== "") {
-    temp += `${fields.value[9]} < "${form.class_lt}" and `
-  }
-  return (temp = temp.slice(0, -5))
-}
 
-const searchBtn = async () => {
-  // sqlFilterParams
-  emit("search", sqlFilterParams())
-}
+  const searchBtn = async () => {
+    // sqlFilterParams
+    emit("search", sqlFilterParams())
+  }
 
-// 控制页脚显示与隐藏
-const footerHide = () => {
-  status.value = !status.value
-  btnStatus.value = status.value == true ? "隐藏" : "显示"
-  emit("footer", status.value)
-}
+  // 控制页脚显示与隐藏
+  const footerHide = () => {
+    status.value = !status.value
+    btnStatus.value = status.value == true ? "隐藏" : "显示"
+    emit("footer", status.value)
+  }
 </script>
 
 <script>
-export default {}
+  export default {}
 </script>
 
 <style scoped>
-.el-header {
-  color: 555555;
-}
-
-.box-card {
-  width: 400px;
-  height: 400px;
-}
+  .form {
+    width: 100%;
+    height: 100%;
+  }
 </style>

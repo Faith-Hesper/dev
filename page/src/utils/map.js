@@ -1,6 +1,5 @@
 // import { SuperMap, tiandituTileLayer } from '@supermap/iclient-leaflet'
 // { tiandituTileLayer,tiledMapLayer }
-import "@/utils/L.Icon.Pulse"
 import { recentDate } from "@/utils/date"
 import echarts from "echarts"
 
@@ -16,15 +15,6 @@ const myIcon = L.icon({
   iconUrl: "https://iclient.supermap.io/web/libs/leaflet/1.7.1/images/marker-icon-2x.png",
   iconSize: [25, 35],
 })
-
-const pulsingIcon = (size = 12, color = "F60", fillColor = "FAA90E", animate = true) => {
-  return L.icon.pulse({
-    iconSize: [size, size],
-    color: color,
-    fillColor: fillColor, // 填充色
-    animate: animate,
-  })
-}
 
 // 初始化地图对象
 async function mapObject(id) {
@@ -274,5 +264,5 @@ async function recentPonit(recentquakeData) {
   return await earthPoint(allData)
 }
 
-export { myIcon, pulsingIcon, ponit, mapControl, earthPoint, Chart, recentData, recentPonit }
+export { myIcon, ponit, mapControl, earthPoint, Chart, recentData, recentPonit }
 export default mapObject

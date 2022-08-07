@@ -41,21 +41,23 @@
       default: [],
     },
   })
-  // const map11 = ref({})
+
   const refData = toRef(props, "quakeInformation")
 
   const tableRowClassName = ({ row, rowIndex }) => {
     // console.log(row,rowIndex);
-    if (rowIndex % 2 === 0) {
+    if ((rowIndex + 1) % 2 === 0) {
+      // 偶数行且大于等于 6
       if (row.class >= 6) {
-        return "evenlg-row"
+        return "even-row lg-row"
       }
       return "even-row"
+    } else {
+      if (row.class >= 6) {
+        return "lg-row"
+      }
+      return ""
     }
-    if (row.class >= 6) {
-      return "lg-row"
-    }
-    return ""
   }
 
   const mouseHover = event => {
@@ -109,10 +111,6 @@
   .el-table :deep(.even-row) {
     background-color: #eeeeee;
   }
-  .el-table :deep(.evenlg-row) {
-    background-color: #eeeeee;
-    color: red;
-  }
   .el-table :deep(.lg-row) {
     color: red;
   }
@@ -126,6 +124,6 @@
   }
   .location-cell:hover {
     cursor: pointer;
-    color: blue;
+    color: #5e94fa;
   }
 </style>

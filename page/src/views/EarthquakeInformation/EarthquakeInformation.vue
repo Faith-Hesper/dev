@@ -1,8 +1,11 @@
 <template>
   <div class="container">
-    <QuakeDataSearch class="tool" @footer="footerStatusChange" @search="search"></QuakeDataSearch>
+    <div class="tool">
+      <DragCard title="地震查询">
+        <QuakeDataSearch @footer="footerStatusChange" @search="search"></QuakeDataSearch>
+      </DragCard>
+    </div>
     <div class="map">
-      <!-- <MapContainer mapId="quakeMap" :sqlResultLayer="sqlResultFeatures" style="max-width:1000px; height:500px"> -->
       <MapContainer @map-created="mapInit" />
     </div>
     <div class="footer">
@@ -15,17 +18,18 @@
 
 <script setup>
   import { onBeforeMount, onMounted, shallowReactive, reactive, ref } from "vue"
-  import BreadCrumb from "@/components/Common/BreadCrumb"
+  // import BreadCrumb from "@/components/Common/BreadCrumb"
+  import DragCard from "@/components/Common/DragCard.vue"
   import QuakeDataSearch from "@/components/Common/QuakeDataSearch"
   import MapContainer from "@/components/MapContainer/MapContainer"
   import FooterContainer from "@/components/FooterContainer/FooterContainer.vue"
   import { earthquake } from "@/api/base.js"
   import { sqlQuery } from "@/utils/analysis"
+  import { pulsingIcon } from "@/utils/icon.js"
 
-  const asideShow = ref()
   const footerStatus = ref(true)
   const sqlQueryResult = ref([])
-  const sqlResultFeatures = ref({})
+  const sqlResultFeatures = ref(null)
 
   const customMap = shallowReactive({
     map: null,
@@ -56,9 +60,9 @@
   // 获取SQL查询到的数据并传给子组件
   const search = async sqlFilter => {
     const { features } = await sqlQuery(sqlFilter)
-    console.log(features)
+    // console.log(features)
     sqlResultFeatures.value = features
-    console.log(sqlResultFeatures.value)
+    // console.log(sqlResultFeatures.value)
 
     let sqlData = features.map(item => {
       let temp = {
@@ -73,6 +77,48 @@
     })
     sqlQueryResult.value = sqlData
     console.log(sqlQueryResult)
+
+    drawLayer(features)
+  }
+
+  const drawLayer = queryResult => {
+    // try {
+    //   customMap.map.removeLayer(sqlLayer)
+    //   // maps.control.removeLayer(sqlLayer)
+    // } catch (error) {}
+
+    // customMap.map.flyTo(
+    //   L.latLng(
+    //     sqlQueryResult.features[0].properties.LAT,
+    //     sqlQueryResult.features[0].properties.LNG
+    //   ),
+    //   8
+    // )
+    let sqlLayer = L.geoJSON(queryResult, {
+      pointToLayer: (geoJsonPoint, latlng) => {
+        // console.log(geoJsonPoint)
+        // 震级大于等于 6
+        if (geoJsonPoint.properties.CLASS >= 6) {
+          return L.marker(latlng, {
+            icon: pulsingIcon(geoJsonPoint.properties.CLASS * 2.5, "#F60", "#ff0000"),
+          }).bindPopup(
+            `<p>震源: ${geoJsonPoint.properties.LOCATION}</p><p>震级: ${geoJsonPoint.properties.CLASS}</p><p>深度: ${geoJsonPoint.properties.DEPTH} 千米</p><p>发震时刻: ${geoJsonPoint.properties.QUAKEDATE}</p`
+          )
+        }
+        return L.marker(latlng, {
+          icon: pulsingIcon(geoJsonPoint.properties.CLASS * 2.5, "#F60", "#efcc00", false),
+        }).bindPopup(
+          `<p>震源: ${geoJsonPoint.properties.LOCATION}</p><p>震级: ${geoJsonPoint.properties.CLASS}</p><p>深度: ${geoJsonPoint.properties.DEPTH} 千米</p><p>发震时刻: ${geoJsonPoint.properties.QUAKEDATE}</p`
+        )
+      },
+    })
+    sqlLayer
+      .on("mousemove", e => e.layer.openPopup())
+      .on("mouseout", e => e.layer.closePopup())
+      .on("click", e => customMap.map.flyTo(e.latlng, 8))
+      .addTo(customMap.map)
+
+    // maps.control.addOverlay(sqlLayer, "地震点")
   }
 </script>
 
@@ -110,7 +156,7 @@
     position: absolute;
     margin-left: 2%;
     margin-top: 20px;
-    width: 400px;
+    width: 380px;
     height: 300px;
     z-index: 2;
   }
