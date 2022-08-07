@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2022-04-02 17:08
  * @LastAuthor: Faith
- * @LastEditTime: 2022-08-05 20:33
+ * @LastEditTime: 2022-08-07 10:07
  * @Description: 超图分析函数
  */
 
@@ -45,17 +45,15 @@ async function dateSelect(param) {
 async function sqlQuery({
   url = BASE_CONFIG.BASEURL.dataUrl,
   filter = "",
-  group = "",
   datasetNames = ["points:earthquakePoint"],
   fromIndex = 0,
   toIndex = 19,
 } = {}) {
-  // filter = filter == '' ? '' : `Date_User> "${filter} 00:00:00"`
   let queryParam = {
     name: "earthquakePoint",
     attributeFilter: filter,
-    groupBy: group,
   }
+  //
   let sqlParameters = {
     queryParameter: queryParam,
     datasetNames: datasetNames,
@@ -65,14 +63,21 @@ async function sqlQuery({
   Object.assign(sqlParameters, ...arguments)
   const sqlParam = new L.supermap.GetFeaturesBySQLParameters(sqlParameters)
   return await new Promise((resolve, reject) => {
-    L.supermap.featureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-      serviceResult.type === "processFailed"
-        ? alert(serviceResult.error + "\n请打开iServer服务")
-        : true
-      console.log(serviceResult)
-      resolve(serviceResult.result.features)
+    new L.supermap.FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+      if (serviceResult.type === "processFailed" || serviceResult.error) {
+        ElMessage({
+          showClose: true,
+          message: `${serviceResult.error}`,
+          offset: 40,
+          grouping: true,
+          type: "error",
+        })
+        reject(serviceResult.error)
+      } else {
+        resolve(serviceResult.result.features)
+      }
     })
-  }).catch(err => console.log(err))
+  })
 }
 
 // 查询字段信息

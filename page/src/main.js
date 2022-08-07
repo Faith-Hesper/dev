@@ -8,6 +8,8 @@ import "./assets/css/comman.css"
 import "./assets/css/L.Icon.Pulse.css"
 import "@/config/config"
 
+import Directives from "@/utils/directive"
+
 import {
   Location,
   Document,
@@ -25,6 +27,8 @@ const app = createApp(App)
 
 app.use(router)
 app.use(store)
+
+app.use(Directives)
 
 app.component("location", Location)
 app.component("document", Document)

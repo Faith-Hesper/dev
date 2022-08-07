@@ -1,8 +1,7 @@
 <template>
-  <div id="toolbar">
-    <el-card>
-      <div>缓冲区</div>
-      <el-form :model="form" label-position="left" label-width="auto">
+  <div class="toolbar">
+    <DragCard title="缓冲区">
+      <el-form class="form" :model="form" label-position="left" label-width="auto">
         <el-form-item label="数据源">
           <el-select v-model="form.datasourceName">
             <el-option v-for="item in datasources" :label="item" :value="item" />
@@ -14,24 +13,30 @@
           </el-select>
         </el-form-item>
         <el-form-item label="日期">
-          <el-select v-model="form.date">
-            <el-option label="2" value="item" />
+          <el-select v-model="form.date" filterable>
+            <el-option v-for="item in date" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="datasetsPrint">查询</el-button>
+          <el-button
+            type="primary"
+            @click="datasetsPrint(form.datasourceName, form.datasetName, form.date)"
+            >查询</el-button
+          >
         </el-form-item>
       </el-form>
-    </el-card>
+    </DragCard>
   </div>
   <MapContainer @map-created="mapInit" />
 </template>
 
 <script setup>
   import MapContainer from "@/components/MapContainer/MapContainer"
+  import DragCard from "@/components/Common/DragCard.vue"
   import { onMounted, onBeforeMount, nextTick, reactive, ref, shallowReactive, watch } from "vue"
   // import initMap from "@/utils/echartsMap"
   import { getDatasourcesName, getDatasetsName, sqlQuery } from "@/utils/analysis"
+  import { debounce } from "@/utils/tool.js"
   // import { HeatMapLayer } from "@supermap/iclient-leaflet"
   const customMap = shallowReactive({
     map: null,
@@ -39,13 +44,20 @@
   })
   const datasources = ref([])
   const datasets = ref([])
+  const date = ref([])
   const form = reactive({
     datasourceName: "",
     datasetName: "",
     date: "",
   })
 
-  const datasetsPrint = () => {}
+  // 查询数据
+  const datasetsPrint = async (datasourceName, datasetName, date) => {
+    const filter = `Date_User > 'to_date(${date})'`
+    const datasetNames = [datasourceName + ":" + datasetName]
+    const data = await sqlQuery({ filter: filter, datasetNames: datasetNames, toIndex: 999 })
+    console.log(data)
+  }
 
   const mapInit = mapObject => {
     customMap.map = mapObject.map
@@ -61,6 +73,16 @@
     datasets.value = await getDatasetsName(datasources.value)
     form.datasetName = datasets.value[0]
     // console.log(sources)
+    // 获取时间
+    const { features } = await sqlQuery({
+      queryParameter: { fields: ["Date_User"], groupBy: "Date_User" },
+      toIndex: 999,
+    })
+    date.value = features.map(feature => {
+      return feature.properties.Date_User
+    })
+    form.date = date.value[0]
+    // console.log(formDate)
   }
   getDatasetNames()
 
@@ -99,13 +121,16 @@
 </script>
 
 <style scoped>
-  #toolbar {
+  .toolbar {
     position: absolute;
     top: 100px;
     right: 10px;
     width: 300px;
     text-align: center;
-    z-index: 500;
+    z-index: 2;
     border-radius: 4px;
+  }
+  .form {
+    padding: 0 5px;
   }
 </style>

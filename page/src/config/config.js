@@ -2,16 +2,16 @@
  * @Author: Faith
  * @Date: 2022-06-20 19:23
  * @LastAuthor: Faith
- * @LastEditTime: 2022-08-04 21:30
+ * @LastEditTime: 2022-08-07 10:34
  * @Description:
  */
 window.BASE_CONFIG = {
   key: "70c2475638a45e3fea8696df2f9917f8",
   MAP: {
-    center: [30.67, 104.07],
+    center: [35.67, 114.07],
     minZoom: 2,
     maxZoom: 18,
-    zoom: 12,
+    zoom: 8,
     zoomControl: false,
     map_crs: "EPSG4326",
     maxBounds: [
