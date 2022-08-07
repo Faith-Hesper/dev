@@ -40,7 +40,7 @@
   // import initMap from "@/utils/echartsMap"
   import { getDatasourcesName, getDatasetsName, sqlQuery } from "@/utils/analysis"
   import { debounce } from "@/utils/tool.js"
-  // import { HeatMapLayer } from "@supermap/iclient-leaflet"
+  import { HeatMapLayer } from "@supermap/iclient-leaflet"
   const customMap = shallowReactive({
     map: null,
     features: null,
@@ -112,7 +112,13 @@
       date.value = await Promise.all(getfeature)
       form.date = date.value[0]
       // loading.value = false
-
+      ElMessage({
+        showClose: true,
+        dangerouslyUseHTMLString: true,
+        offset: 50,
+        message: `<P>一共${total}条信息</P><p>当前一共为您找到${features.length}条信息</p>`,
+        type: "success",
+      })
       return await Promise.resolve("")
     } catch (error) {
     } finally {
@@ -122,14 +128,6 @@
 
   // 数据集切换获取时间集合
   function datasetChange() {
-    ElMessage({
-      // showClose: true,
-      // dangerouslyUseHTMLString: true,
-      duration: 200,
-      offset: 50,
-      message: '当前一共为您找到条信息',
-      type: 'success'
-    })
     getDates(form.datasourceName, form.datasetName)
   }
   // sqlQuery({ filter: "2021-11-28" }).then(res => {
@@ -153,7 +151,7 @@
   // 添加热力图
   function initHeatMap(features) {
     console.log(features)
-    let heatMapLayer = new L.supermap.HeatMapLayer("heatMap", {
+    let heatMapLayer = new HeatMapLayer("heatMap", {
       id: "heatmap",
       map: customMap.map,
       radius: 80,
