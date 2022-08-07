@@ -54,7 +54,7 @@
     earthquake().then(res => {
       console.log(res)
     })
-    console.log(customMap.map)
+    // console.log(customMap.map)
   })
 
   // 获取SQL查询到的数据并传给子组件

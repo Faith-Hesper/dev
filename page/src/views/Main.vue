@@ -86,6 +86,7 @@
   }
 
   .main {
+    width: 1600px;
     padding: 0;
     overflow: hidden;
   }

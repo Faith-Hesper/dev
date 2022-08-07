@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2022-04-02 17:08
  * @LastAuthor: Faith
- * @LastEditTime: 2022-08-07 14:42
+ * @LastEditTime: 2022-08-07 20:22
  * @Description: 超图分析函数
  */
 
@@ -41,10 +41,13 @@ async function dateSelect(param) {
 async function sqlQuery({
   url = BASE_CONFIG.BASEURL.dataUrl,
   filter = "",
-  datasetNames = ["points:earthquakePoint"],
+  datasourceName = "points",
+  datasetName = "earthquakePoint",
   fromIndex = 0,
   toIndex = 19,
 } = {}) {
+  const datasetNames = [datasourceName + ":" + datasetName]
+  console.log(datasetNames, datasourceName, datasetName)
   let queryParam = {
     name: "earthquakePoint",
     attributeFilter: filter,
@@ -64,13 +67,13 @@ async function sqlQuery({
         ElMessage({
           showClose: true,
           message: `${serviceResult.error}`,
-          offset: 40,
+          offset: 50,
           grouping: true,
           type: "error",
         })
         reject(serviceResult.error)
       } else {
-        resolve(serviceResult.result.features)
+        resolve({ features: serviceResult.result.features, total: serviceResult.result.totalCount })
       }
     })
   })
