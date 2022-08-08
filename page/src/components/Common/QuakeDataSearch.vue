@@ -121,34 +121,34 @@
   const sqlFilterParams = () => {
     let temp = ""
     if (form.date[0] !== undefined) {
-      temp += `${fields.value[3]} >= "${form.date[0]}  00:00:00" and `
+      temp += `QUAKEDATE >= "${form.date[0]}  00:00:00" and `
     }
     if (form.date[1] !== undefined) {
-      temp += `${fields.value[3]} < "${form.date[1]}  00:00:00" and `
+      temp += `QUAKEDATE < "${form.date[1]}  00:00:00" and `
     }
     if (form.lng_gt !== "") {
-      temp += `${fields.value[5]} >= "${form.lng_gt}" and `
+      temp += `LNG >= "${form.lng_gt}" and `
     }
     if (form.lng_lt !== "") {
-      temp += `${fields.value[5]} < "${form.lng_lt}" and `
+      temp += `LNG < "${form.lng_lt}" and `
     }
     if (form.lat_gt !== "") {
-      temp += `${fields.value[6]} >= "${form.lat_gt}" and `
+      temp += `LAT >= "${form.lat_gt}" and `
     }
     if (form.lat_lt !== "") {
-      temp += `${fields.value[6]} < "${form.lat_lt}" and `
+      temp += `LAT < "${form.lat_lt}" and `
     }
     if (form.depth_gt !== "") {
-      temp += `${fields.value[7]} >= "${form.depth_gt}" and `
+      temp += `DEPTH >= "${form.depth_gt}" and `
     }
     if (form.depth_lt !== "") {
-      temp += `${fields.value[7]} < "${form.depth_lt}" and `
+      temp += `DEPTH < "${form.depth_lt}" and `
     }
     if (form.class_gt !== "") {
-      temp += `${fields.value[9]} >= "${form.class_gt}" and `
+      temp += `CLASS >= "${form.class_gt}" and `
     }
     if (form.class_lt !== "") {
-      temp += `${fields.value[9]} < "${form.class_lt}" and `
+      temp += `CLASS < "${form.class_lt}" and `
     }
     return (temp = temp.slice(0, -5))
   }

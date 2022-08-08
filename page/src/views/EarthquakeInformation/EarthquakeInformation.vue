@@ -26,6 +26,7 @@
   import { earthquake } from "@/api/base.js"
   import { sqlQuery } from "@/utils/analysis"
   import { pulsingIcon } from "@/utils/icon.js"
+  import pulsingLayer from "@/utils/pulsingLayer.js"
   import { useStore } from "vuex"
   const store = useStore()
 
@@ -101,29 +102,30 @@
     //   ),
     //   8
     // )
-    let sqlLayer = L.geoJSON(queryResult, {
-      pointToLayer: (geoJsonPoint, latlng) => {
-        // console.log(geoJsonPoint)
-        // 震级大于等于 6
-        if (geoJsonPoint.properties.CLASS >= 6) {
-          return L.marker(latlng, {
-            icon: pulsingIcon(geoJsonPoint.properties.CLASS * 2.5, "#F60", "#ff0000"),
-          }).bindPopup(
-            `<p>震源: ${geoJsonPoint.properties.LOCATION}</p><p>震级: ${geoJsonPoint.properties.CLASS}</p><p>深度: ${geoJsonPoint.properties.DEPTH} 千米</p><p>发震时刻: ${geoJsonPoint.properties.QUAKEDATE}</p`
-          )
-        }
-        return L.marker(latlng, {
-          icon: pulsingIcon(geoJsonPoint.properties.CLASS * 2.5, "#F60", "#efcc00", false),
-        }).bindPopup(
-          `<p>震源: ${geoJsonPoint.properties.LOCATION}</p><p>震级: ${geoJsonPoint.properties.CLASS}</p><p>深度: ${geoJsonPoint.properties.DEPTH} 千米</p><p>发震时刻: ${geoJsonPoint.properties.QUAKEDATE}</p`
-        )
-      },
-    })
-    sqlLayer
-      .on("mousemove", e => e.layer.openPopup())
-      .on("mouseout", e => e.layer.closePopup())
-      .on("click", e => customMap.map.flyTo(e.latlng, 8))
-      .addTo(customMap.map)
+    pulsingLayer(queryResult, customMap.map)
+    // let sqlLayer = L.geoJSON(queryResult, {
+    //   pointToLayer: (geoJsonPoint, latlng) => {
+    //     // console.log(geoJsonPoint)
+    //     // 震级大于等于 6
+    //     if (geoJsonPoint.properties.CLASS >= 6) {
+    //       return L.marker(latlng, {
+    //         icon: pulsingIcon(geoJsonPoint.properties.CLASS * 2.5, "#F60", "#ff0000"),
+    //       }).bindPopup(
+    //         `<p>震源: ${geoJsonPoint.properties.LOCATION}</p><p>震级: ${geoJsonPoint.properties.CLASS}</p><p>深度: ${geoJsonPoint.properties.DEPTH} 千米</p><p>发震时刻: ${geoJsonPoint.properties.QUAKEDATE}</p`
+    //       )
+    //     }
+    //     return L.marker(latlng, {
+    //       icon: pulsingIcon(geoJsonPoint.properties.CLASS * 2.5, "#F60", "#efcc00", false),
+    //     }).bindPopup(
+    //       `<p>震源: ${geoJsonPoint.properties.LOCATION}</p><p>震级: ${geoJsonPoint.properties.CLASS}</p><p>深度: ${geoJsonPoint.properties.DEPTH} 千米</p><p>发震时刻: ${geoJsonPoint.properties.QUAKEDATE}</p`
+    //     )
+    //   },
+    // })
+    // sqlLayer
+    //   .on("mousemove", e => e.layer.openPopup())
+    //   .on("mouseout", e => e.layer.closePopup())
+    //   .on("click", e => customMap.map.flyTo(e.latlng, 8))
+    //   .addTo(customMap.map)
 
     // maps.control.addOverlay(sqlLayer, "地震点")
   }

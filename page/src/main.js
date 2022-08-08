@@ -5,6 +5,7 @@ import store from "@/store"
 
 import "leaflet/dist/leaflet.css"
 import "./assets/css/comman.css"
+import "./assets/css/map.less"
 import "./assets/css/L.Icon.Pulse.css"
 import "@/config/config"
 
