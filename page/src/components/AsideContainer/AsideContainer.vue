@@ -41,112 +41,114 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject, computed } from "vue"
-import { recentPonit } from "@/utils/map"
+  import { onMounted, ref, inject, computed } from "vue"
+  import { recentPonit } from "@/utils/map"
+  import { useRouter, useRoute } from "vue-router"
+  import { useStore } from "vuex"
+  const store = useStore()
+  const router = useRouter()
+  const route = useRoute()
 
-const menu = [
-  {
-    path: "/home",
-    name: "home",
-    label: "首页",
-    icon: "house",
-    url: "",
-  },
-  {
-    path: "/simulation",
-    label: "地震模拟",
-    icon: "location",
-    children: [
-      {
-        path: "/recent",
-        name: "",
-        label: "7天内数据",
-        icon: "location",
-        url: "",
-      },
-    ],
-  },
-  {
-    path: "/statistic",
-    name: "",
-    label: "统计上报",
-    icon: "icon-menu",
-    url: "",
-  },
-  {
-    path: "/history",
-    label: "历史地震",
-    icon: "document",
-    children: [
-      {
-        path: "/quakeInformation",
-        name: "",
-        label: "地震信息",
-        icon: "location",
-        url: "",
-      },
-    ],
-  },
-  {
-    path: "/themetic",
-    name: "",
-    label: "专题图",
-    icon: "setting",
-    url: "",
-  },
-]
+  const menu = [
+    {
+      path: "/home",
+      name: "home",
+      label: "首页",
+      icon: "house",
+      url: "",
+    },
+    {
+      path: "/simulation",
+      label: "地震模拟",
+      icon: "location",
+      children: [
+        {
+          path: "/recent",
+          name: "",
+          label: "7天内数据",
+          icon: "location",
+          url: "",
+        },
+      ],
+    },
+    {
+      path: "/statistic",
+      name: "",
+      label: "统计上报",
+      icon: "icon-menu",
+      url: "",
+    },
+    {
+      path: "/history",
+      label: "历史地震",
+      icon: "document",
+      children: [
+        {
+          path: "/quakeInformation",
+          name: "",
+          label: "地震信息",
+          icon: "location",
+          url: "",
+        },
+      ],
+    },
+    {
+      path: "/themetic",
+      name: "",
+      label: "专题图",
+      icon: "setting",
+      url: "",
+    },
+  ]
 
-const recentquakeData = inject("recentquakeData")
-console.log(recentquakeData)
+  const recentquakeData = inject("recentquakeData")
+  console.log(recentquakeData)
 
-const recent = async () => {
-  await recentPonit(recentquakeData)
-}
+  const recent = async () => {
+    await recentPonit(recentquakeData)
+  }
 
-// 筛选出无子菜单的菜单集合
-const noChildren = computed(() => {
-  return menu.filter(item => !item.children)
-})
+  // 筛选出无子菜单的菜单集合
+  const noChildren = computed(() => {
+    return menu.filter(item => !item.children)
+  })
 
-// 筛选出有子菜单的菜单集合
-const hasChildren = computed(() => {
-  return menu.filter(item => item.children)
-})
+  // 筛选出有子菜单的菜单集合
+  const hasChildren = computed(() => {
+    return menu.filter(item => item.children)
+  })
 
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key, keyPath) => {
-  console.log(key, keyPath)
-}
+  const handleOpen = (key, keyPath) => {
+    console.log(key, keyPath)
+  }
+  const handleClose = (key, keyPath) => {
+    console.log(key, keyPath)
+  }
+  const isCollapse = computed(() => store.state.btn.collapseStatus)
+  const active = computed(() => route.path)
 </script>
 
 <script>
-export default {
-  name: "Aside",
-  computed: {
-    isCollapse() {
-      return this.$store.state.collapseStatus
-    },
-  },
-}
+  export default {
+    name: "Aside",
+  }
 </script>
 
 <style lang="less" scoped>
-h3 {
-  color: #fff;
-  font-size: 15px;
-}
-.el-menu {
-  border-right: 0;
-}
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
   h3 {
     color: #fff;
-    text-align: center;
-    line-height: 48px;
+    font-size: 15px;
   }
-}
+  .el-menu {
+    border-right: 0;
+  }
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+    h3 {
+      color: #fff;
+      text-align: center;
+      line-height: 48px;
+    }
+  }
 </style>

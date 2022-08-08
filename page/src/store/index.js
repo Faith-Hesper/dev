@@ -1,21 +1,10 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex"
+import btn from "./button"
 
 const store = createStore({
-  state () {
-    return {
-      collapseStatus: true,
-      map: {}
-    }
-  },
-  mutations: {
-    collapseStatusChange (state) {
-      state.collapseStatus = !state.collapseStatus
-    },
-    mapChange(state, map) {
-      state.map = map
-    }
+  modules:{
+    btn
   }
 })
 
 export default store
-
