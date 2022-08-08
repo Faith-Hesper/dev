@@ -169,7 +169,8 @@
 
 <style scoped>
   .query-form {
-    width: 100%;
+    width: 380px;
+    padding: 0 5px;
     height: 100%;
   }
 </style>

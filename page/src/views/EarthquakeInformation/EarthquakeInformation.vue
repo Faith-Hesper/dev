@@ -2,7 +2,7 @@
   <div class="container">
     <div class="tool">
       <DragCard title="地震查询">
-        <QuakeDataSearch @footer="footerStatusChange" @search="search"></QuakeDataSearch>
+        <QuakeDataSearch  @footer="footerStatusChange" @search="search"></QuakeDataSearch>
       </DragCard>
     </div>
     <div class="map">
@@ -154,10 +154,11 @@
 
   .tool {
     position: absolute;
-    margin-left: 2%;
+    margin-left: 10px;
     margin-top: 20px;
     width: 380px;
     height: 300px;
     z-index: 2;
+    background: #fff;
   }
 </style>

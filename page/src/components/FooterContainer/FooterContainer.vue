@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="quakeData" :row-class-name="tableRowClassName" border max-height="300">
+  <el-table :data="quakeData" :row-class-name="tableRowClassName" height="200" max-height="300">
     <el-table-column prop="class" sortable label="震级(M)"></el-table-column>
     <el-table-column prop="date" label="发震时刻"></el-table-column>
     <el-table-column prop="lat" label="纬度(°)"></el-table-column>

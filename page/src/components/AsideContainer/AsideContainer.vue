@@ -7,7 +7,7 @@
     text-color="#fff"
     @open="handleOpen"
     @close="handleClose"
-    default-active="/home"
+    :default-active="active"
     router
   >
     <h3>管理后台</h3>
