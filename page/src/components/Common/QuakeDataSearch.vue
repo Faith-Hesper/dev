@@ -93,9 +93,12 @@
 
 <script setup>
   import { getFieldsName } from "@/utils/analysis"
-  import { reactive, ref, onBeforeMount } from "vue"
+  import { reactive, ref, onBeforeMount, computed } from "vue"
+  import { useStore } from "vuex"
+  const store = useStore()
+
   const btnStatus = ref("显示")
-  const status = ref(false)
+  const status = computed(() => store.state.btn.formStatus)
   const fields = ref([])
   const form = reactive({
     date: [],
@@ -155,9 +158,10 @@
     emit("search", sqlFilterParams())
   }
 
+  const changeStatus = () => store.dispatch("btn/formStatusChange")
   // 控制页脚显示与隐藏
   const footerHide = () => {
-    status.value = !status.value
+    changeStatus()
     btnStatus.value = status.value == true ? "隐藏" : "显示"
     emit("footer", status.value)
   }

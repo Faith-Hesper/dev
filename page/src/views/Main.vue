@@ -8,8 +8,9 @@
         <HeaderContainer> </HeaderContainer>
       </div>
       <div class="main">
-        <router-view></router-view>
-        <!-- <MapContainer></MapContainer> -->
+        <transition name="fade" mode="out-in">
+          <router-view></router-view>
+        </transition>
       </div>
     </div>
   </div>

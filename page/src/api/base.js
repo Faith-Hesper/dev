@@ -1,8 +1,8 @@
 /*
  * @Author: Faith
  * @Date: 2022-03-18 08:32
- * @LastAuthor: Please set LastEditors
- * @LastEditTime: 2022-05-15 16:29
+ * @LastAuthor: Faith
+ * @LastEditTime: 2022-08-08 20:01
  * @Description:
  */
 import { _get, _post } from "./index"
@@ -24,7 +24,7 @@ async function earthquake() {
 }
 
 async function sqlData(date) {
-  const { data } = await _get("/api/info", date).catch(err => console.log(err))
+  const { data } = await _get("/api/info", { date: date }).catch(err => console.log(err))
   // console.log(data);
   return data
 }

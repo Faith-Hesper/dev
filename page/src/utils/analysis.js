@@ -2,7 +2,7 @@
  * @Author: Faith
  * @Date: 2022-04-02 17:08
  * @LastAuthor: Faith
- * @LastEditTime: 2022-08-07 21:53
+ * @LastEditTime: 2022-08-08 21:06
  * @Description: 超图分析函数
  */
 
@@ -100,7 +100,18 @@ async function sqlQuery({
         })
         reject(serviceResult.error)
       } else {
-        resolve({ features: serviceResult.result.features, total: serviceResult.result.totalCount })
+        const features = serviceResult.result.features
+        const total = serviceResult.result.totalCount
+        if (features.lenth === 0) {
+          ElMessage({
+            showClose: true,
+            message: `未查询到数据`,
+            offset: 50,
+            grouping: true,
+            type: "warning",
+          })
+        }
+        resolve({ features: features, total: total })
       }
     })
   })

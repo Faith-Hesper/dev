@@ -2,22 +2,22 @@
   <div class="container">
     <div class="tool">
       <DragCard title="地震查询">
-        <QuakeDataSearch  @footer="footerStatusChange" @search="search"></QuakeDataSearch>
+        <QuakeDataSearch @footer="footerStatusChange" @search="search"></QuakeDataSearch>
       </DragCard>
     </div>
     <div class="map">
       <MapContainer @map-created="mapInit" />
     </div>
     <div class="footer">
-      <template v-if="footerStatus">
-        <FooterContainer :quakeInformation="sqlQueryResult"></FooterContainer>
+      <template v-if="status">
+        <FooterContainer :quakeInformation="sqlQueryResult" @on-click="flyTo"></FooterContainer>
       </template>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { onBeforeMount, onMounted, shallowReactive, reactive, ref } from "vue"
+  import { onBeforeMount, onMounted, shallowReactive, reactive, ref, computed } from "vue"
   // import BreadCrumb from "@/components/Common/BreadCrumb"
   import DragCard from "@/components/Common/DragCard.vue"
   import QuakeDataSearch from "@/components/Common/QuakeDataSearch"
@@ -26,8 +26,10 @@
   import { earthquake } from "@/api/base.js"
   import { sqlQuery } from "@/utils/analysis"
   import { pulsingIcon } from "@/utils/icon.js"
+  import { useStore } from "vuex"
+  const store = useStore()
 
-  const footerStatus = ref(true)
+  const status = computed(() => store.state.btn.formStatus)
   const sqlQueryResult = ref([])
   const sqlResultFeatures = ref(null)
 
@@ -46,9 +48,9 @@
   }
 
   // 地震信息列表状态
-  const footerStatusChange = status => {
-    footerStatus.value = status
-  }
+  // const footerStatusChange = status => {
+  //   footerStatus.value = status
+  // }
 
   onMounted(() => {
     earthquake().then(res => {
@@ -59,7 +61,12 @@
 
   // 获取SQL查询到的数据并传给子组件
   const search = async sqlFilter => {
-    const { features } = await sqlQuery(sqlFilter)
+    console.log(sqlFilter)
+    const {
+      features: { features },
+    } = await sqlQuery({
+      filter: sqlFilter,
+    })
     // console.log(features)
     sqlResultFeatures.value = features
     // console.log(sqlResultFeatures.value)
@@ -119,6 +126,10 @@
       .addTo(customMap.map)
 
     // maps.control.addOverlay(sqlLayer, "地震点")
+  }
+
+  const flyTo = latlng => {
+    customMap.map.flyTo(latlng, 8)
   }
 </script>
 

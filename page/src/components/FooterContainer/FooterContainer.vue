@@ -1,5 +1,11 @@
 <template>
-  <el-table :data="quakeData" :row-class-name="tableRowClassName" height="200" max-height="300">
+  <el-table
+    class="quake-form"
+    :data="quakeData"
+    :row-class-name="tableRowClassName"
+    height="200"
+    max-height="350"
+  >
     <el-table-column prop="class" sortable label="震级(M)"></el-table-column>
     <el-table-column prop="date" label="发震时刻"></el-table-column>
     <el-table-column prop="lat" label="纬度(°)"></el-table-column>
@@ -25,9 +31,8 @@
 
 <script setup>
   import { computed, reactive, ref, toRef, watch } from "vue"
-  import { useStore } from "vuex"
-  const store = useStore()
 
+  const emits = defineEmits(["on-click"])
   const quakeData = ref([])
   const pageParams = reactive({
     status: true,
@@ -72,8 +77,10 @@
   }
 
   const flyToLocation = (index, row) => {
-    let map = store.state.map
-    map.flyTo(L.latLng(row.lat, row.lng), 8)
+    const latlng = L.latLng(row.lat, row.lng)
+    // let map = store.state.map
+    emits("on-click", latlng)
+    // map.flyTo(L.latLng(row.lat, row.lng), 8)
     // document.getElementById('quakeMap').scrollTop = 560
     // console.log(index,row);
   }
@@ -82,11 +89,6 @@
     console.log(a, b)
     return a - b
   }
-
-  // map11.value = computed(()=> {
-  //   console.log(store.state.map);
-  //   return store.state.map
-  // })
 
   // 监听从父组件传入的数据是否发生变化并渲染表格
   watch(
@@ -108,16 +110,17 @@
 </script>
 
 <style lang="less" scoped>
+  .quake-form {
+    border: 5px solid #ebeef5;
+    border-radius: 4px;
+    background-color: #ffffff;
+    transition: all 1s ease;
+  }
   .el-table :deep(.even-row) {
     background-color: #eeeeee;
   }
   .el-table :deep(.lg-row) {
     color: red;
-  }
-  .quaketable {
-    border: 5px solid #ebeef5;
-    border-radius: 4px;
-    background-color: #ffffff;
   }
   .el-pagination {
     justify-content: center;

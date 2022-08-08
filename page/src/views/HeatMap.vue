@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-  // import { ElMessage, ElLoading } from "element-plus"
+  import { ElMessage, ElLoading } from "element-plus"
   import MapContainer from "@/components/MapContainer/MapContainer"
   import DragCard from "@/components/Common/DragCard.vue"
   import { onMounted, onBeforeMount, nextTick, reactive, ref, shallowReactive, watch } from "vue"
